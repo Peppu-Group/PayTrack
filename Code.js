@@ -533,3 +533,8 @@ function copyTemplateThree() {
 function copyTemplateFour() {
 
 }
+
+// function to send email everyday
+function sendMail() {
+  // check if user time == 8:00am and send mail at that time.
+}
