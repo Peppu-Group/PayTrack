@@ -29,7 +29,13 @@
       "logoUrl": "https://www.linkpicture.com/q/IMG_2430.png",
       "layoutProperties": {
         "primaryColor": "#34A853"
-      }
+      },
+      "universalActions": [
+        {
+          "label": "Invoice Reminder",
+          "runFunction": "createTrigger"
+        }
+      ]
     },
     "sheets": {
       "homepageTrigger": {
