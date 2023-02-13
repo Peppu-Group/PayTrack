@@ -538,7 +538,7 @@ function copyTemplateFour() {
 function sendMail() {
   // This should be a time based trigger.
   // You have to create a card to retrieve the id of the sheet of interest.
-  var sheet = SpreadsheetApp.openById('1q5w13pGBpMd5oW568taPwzaNh-BwqxdF8e_IGyVZUTQ').getSheetByName('Invoice')
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Invoice')
   // var row = 3;
   var column = 5; // E3
   var processRow = 990;
@@ -564,19 +564,29 @@ function sendMail() {
   }
 }
 
-function createTrigger() {
+function createTrigger(event) {
   ScriptApp.newTrigger('sendMail')
     .timeBased()
     .atHour(7)
     .nearMinute(55)
     .everyDays(1)
     .create();
+
+  var r = event.source.getActiveRange();
+  if (r.getValue() == "yes") {
+    var ss = SpreadsheetApp.openById('1q5w13pGBpMd5oW568taPwzaNh-BwqxdF8e_IGyVZUTQ')
+    ScriptApp.newTrigger('completeTransaction')
+      .forSpreadsheet(ss)
+      .onEdit()
+      .create();
+  }
 }
 
 function completeTransaction() {
   MailApp.sendEmail('ukpaiugochiibem@gmail.com', 'subject', 'message');
 }
 
+/* 
 function createSpreadsheetEditTrigger(event) {
   var r = event.source.getActiveRange();
   if (r.getValue() == "yes") {
@@ -587,3 +597,4 @@ function createSpreadsheetEditTrigger(event) {
       .create();
   }
 }
+*/
