@@ -537,4 +537,53 @@ function copyTemplateFour() {
 // function to send email everyday
 function sendMail() {
   // This should be a time based trigger.
+  // You have to create a card to retrieve the id of the sheet of interest.
+  var sheet = SpreadsheetApp.openById('1q5w13pGBpMd5oW568taPwzaNh-BwqxdF8e_IGyVZUTQ').getSheetByName('Invoice')
+  // var row = 3;
+  var column = 5; // E3
+  var processRow = 990;
+  var processCol = 2;// D3:G990
+  var dataRange = sheet.getRange(3, 5, 990, 3);
+  var data = dataRange.getValues();
+
+  for (i in data) {
+    var row = data[i];
+    Logger.log(row[2])
+    if (row[2] == 'no') {
+      Logger.log('no')
+      var emailAddress = row[1];
+      var subject = 'Invoice Due';
+      var date = row[0];
+      var message = `You have an unpaid invoice for PayTrack due for ${date}`;
+      try {
+        MailApp.sendEmail(emailAddress, subject, message);
+      } catch (errorDetails) {
+        Logger.log(errorDetails);
+      }
+    }
+  }
+}
+
+function createTrigger() {
+  ScriptApp.newTrigger('sendMail')
+    .timeBased()
+    .atHour(7)
+    .nearMinute(55)
+    .everyDays(1)
+    .create();
+}
+
+function completeTransaction() {
+  MailApp.sendEmail('ukpaiugochiibem@gmail.com', 'subject', 'message');
+}
+
+function createSpreadsheetEditTrigger(event) {
+  var r = event.source.getActiveRange();
+  if (r.getValue() == "yes") {
+    var ss = SpreadsheetApp.openById('1q5w13pGBpMd5oW568taPwzaNh-BwqxdF8e_IGyVZUTQ')
+    ScriptApp.newTrigger('completeTransaction')
+      .forSpreadsheet(ss)
+      .onEdit()
+      .create();
+  }
 }
