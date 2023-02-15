@@ -579,7 +579,7 @@ function completeTransaction() {
 
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
-      .setText('Successfully Installed Triggers'))
+      .setText(`Hi, you've successfully installed triggers, do not click on this button again`))
     .build();
 }
 
