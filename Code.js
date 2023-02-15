@@ -562,17 +562,15 @@ function sendMail() {
   }
 }
 
-function createTrigger() {
-  ScriptApp.newTrigger('sendMail')
-    .timeBased()
-    .atHour(7)
-    .nearMinute(0)
-    .everyDays(1)
-    .create();
-}
-
 // what if we attach these triggers to the sheet of interest? This will be the perfect solution.
 function completeTransaction() {
+  ScriptApp.newTrigger('sendMail')
+  .timeBased()
+  .atHour(7)
+  .nearMinute(0)
+  .everyDays(1)
+  .create();
+
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   ScriptApp.newTrigger('completetrans')
     .forSpreadsheet(ss)

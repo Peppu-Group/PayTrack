@@ -32,12 +32,7 @@
       },
       "universalActions": [
         {
-          "label": "Invoice Reminder",
-          "runFunction": "createTrigger"
-        },
-
-        {
-          "label": "Complete Transaction",
+          "label": "Transaction Trigger",
           "runFunction": "completeTransaction"
         }
       ]
