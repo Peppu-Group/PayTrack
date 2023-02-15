@@ -577,7 +577,7 @@ function completeTransaction() {
     .onEdit()
     .create();
 
-  CardService.newActionResponseBuilder()
+  return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText('Successfully Installed Triggers'))
     .build();
