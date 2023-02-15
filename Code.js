@@ -534,26 +534,25 @@ function copyTemplateFour() {
 
 }
 
-// function to send email everyday
+// function to send email everyday about due invoice to user's client.
 function sendMail() {
-  // This should be a time based trigger.
-  // You have to create a card to retrieve the id of the sheet of interest.
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Invoice')
-  // var row = 3;
-  var column = 5; // E3
-  var processRow = 990;
-  var processCol = 2;// D3:G990
+
+  // get range of data and values, containing email, subject, etc.
   var dataRange = sheet.getRange(3, 5, 990, 3);
   var data = dataRange.getValues();
 
+  // loop through to get all values
   for (i in data) {
     var row = data[i];
     if (row[2] == 'no') {
       var emailAddress = row[1];
       var subject = 'Invoice Due';
       var date = row[0];
+      /* Change PayTrack to the name of the user or their firm. */
       var message = `You have an unpaid invoice for PayTrack due for ${date}`;
       try {
+        // send email to client.
         MailApp.sendEmail(emailAddress, subject, message);
       } catch (errorDetails) {
         Logger.log(errorDetails);
