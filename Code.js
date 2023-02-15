@@ -628,16 +628,3 @@ function completetrans() {
     )
   }
 }
-
-/*
-function createSpreadsheetEditTrigger(event) {
-  var r = event.source.getActiveRange();
-  if (r.getValue() == "yes") {
-    var ss = SpreadsheetApp.openById('1q5w13pGBpMd5oW568taPwzaNh-BwqxdF8e_IGyVZUTQ')
-    ScriptApp.newTrigger('completeTransaction')
-      .forSpreadsheet(ss)
-      .onEdit()
-      .create();
-  }
-}
-*/
