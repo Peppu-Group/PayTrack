@@ -565,17 +565,22 @@ function sendMail() {
 // what if we attach these triggers to the sheet of interest? This will be the perfect solution.
 function completeTransaction() {
   ScriptApp.newTrigger('sendMail')
-  .timeBased()
-  .atHour(7)
-  .nearMinute(0)
-  .everyDays(1)
-  .create();
+    .timeBased()
+    .atHour(7)
+    .nearMinute(0)
+    .everyDays(1)
+    .create();
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   ScriptApp.newTrigger('completetrans')
     .forSpreadsheet(ss)
     .onEdit()
     .create();
+
+  CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText('Successfully Installed Triggers'))
+    .build();
 }
 
 function completetrans() {
@@ -594,7 +599,7 @@ function completetrans() {
   const formattedToday = yyyy + '/' + mm + '/' + dd;
   const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
 
-  var row = ss.getActiveRange().getRow(); 
+  var row = ss.getActiveRange().getRow();
 
   var Description = SpreadsheetApp.getActiveSheet().getRange(`Invoice!C${row}`).getValue();
   var Amount = SpreadsheetApp.getActiveSheet().getRange(`Invoice!D${row}`).getValue();
@@ -620,11 +625,18 @@ function completetrans() {
 
 
   if (ss.getActiveSheet().getSheetName() == 'Invoice' && ss.getActiveRange().getValue() == 'yes') {
-    Sheets.Spreadsheets.Values.append(
-      request,
-      ss.getId(),
-      'Transactions!A:E',
-      optionalArgs
-    )
+    try {
+      Sheets.Spreadsheets.Values.append(
+        request,
+        ss.getId(),
+        'Transactions!A:E',
+        optionalArgs
+      )
+    } catch (errorDetails) {
+      CardService.newActionResponseBuilder()
+        .setNotification(CardService.newNotification()
+          .setText(errorDetails))
+        .build();
+    }
   }
 }
