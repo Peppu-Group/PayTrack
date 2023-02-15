@@ -583,11 +583,11 @@ function completeTransaction() {
     .build();
 }
 
+// `completetrans` function to complete transaction after user marks invoice as paid
 function completetrans() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  var optionalArgs = { valueInputOption: "USER_ENTERED" };
-
+  // Format date for transaction date
   const today = new Date();
   const yyyy = today.getFullYear();
   let mm = today.getMonth() + 1; // Months start at 0!
@@ -597,17 +597,18 @@ function completetrans() {
   if (mm < 10) mm = '0' + mm;
 
   const formattedToday = yyyy + '/' + mm + '/' + dd;
+
+  // Create random number for transaction number
   const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
 
   var row = ss.getActiveRange().getRow();
-
+  // Data for append request
   var Description = SpreadsheetApp.getActiveSheet().getRange(`Invoice!C${row}`).getValue();
   var Amount = SpreadsheetApp.getActiveSheet().getRange(`Invoice!D${row}`).getValue();
   var Debit = 'Cash';
   var Credit = 'Bank';
 
-  // Add today's date
-  // Add unique reference number
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
 
   var request = {
     "majorDimension": "ROWS",
@@ -623,7 +624,7 @@ function completetrans() {
     ]
   }
 
-
+  // if statement, to append value if transaction has been completed and SheetName of edit is invoice sheet.
   if (ss.getActiveSheet().getSheetName() == 'Invoice' && ss.getActiveRange().getValue() == 'yes') {
     try {
       Sheets.Spreadsheets.Values.append(
