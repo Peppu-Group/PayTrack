@@ -508,6 +508,7 @@ function testGrid(e) {
 var cardBuilder1 = CardService.newCardBuilder();
 var cardBuilder2 = CardService.newCardBuilder();
 
+// copyTemplateOne to copy first invoice template
 function copyTemplateOne() {
 
   var source = SpreadsheetApp.getActiveSpreadsheet();
@@ -515,6 +516,7 @@ function copyTemplateOne() {
   var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
   let sheet = destination.getSheets()[0]
 
+  // copy to PayTrack template
   sheet.copyTo(source);
 
   // call invoice card.
