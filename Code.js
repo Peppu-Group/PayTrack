@@ -548,9 +548,7 @@ function sendMail() {
 
   for (i in data) {
     var row = data[i];
-    Logger.log(row[2])
     if (row[2] == 'no') {
-      Logger.log('no')
       var emailAddress = row[1];
       var subject = 'Invoice Due';
       var date = row[0];
@@ -564,29 +562,76 @@ function sendMail() {
   }
 }
 
-function createTrigger(event) {
+function createTrigger() {
   ScriptApp.newTrigger('sendMail')
     .timeBased()
     .atHour(7)
-    .nearMinute(55)
+    .nearMinute(0)
     .everyDays(1)
     .create();
+}
 
-  var r = event.source.getActiveRange();
-  if (r.getValue() == "yes") {
-    var ss = SpreadsheetApp.openById('1q5w13pGBpMd5oW568taPwzaNh-BwqxdF8e_IGyVZUTQ')
-    ScriptApp.newTrigger('completeTransaction')
-      .forSpreadsheet(ss)
-      .onEdit()
-      .create();
+// what if we attach these triggers to the sheet of interest? This will be the perfect solution.
+function completeTransaction() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ScriptApp.newTrigger('completetrans')
+    .forSpreadsheet(ss)
+    .onEdit()
+    .create();
+}
+
+function completetrans() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+  const formattedToday = yyyy + '/' + mm + '/' + dd;
+  const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
+
+  var row = ss.getActiveRange().getRow(); 
+
+  var Description = SpreadsheetApp.getActiveSheet().getRange(`Invoice!C${row}`).getValue();
+  var Amount = SpreadsheetApp.getActiveSheet().getRange(`Invoice!D${row}`).getValue();
+  var Debit = 'Cash';
+  var Credit = 'Bank';
+
+  // Add today's date
+  // Add unique reference number
+
+  var request = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        Amount,
+        Debit,
+        Credit
+      ]
+    ]
+  }
+
+
+  if (ss.getActiveSheet().getSheetName() == 'Invoice' && ss.getActiveRange().getValue() == 'yes') {
+    Sheets.Spreadsheets.Values.append(
+      request,
+      ss.getId(),
+      'Transactions!A:E',
+      optionalArgs
+    )
   }
 }
 
-function completeTransaction() {
-  MailApp.sendEmail('ukpaiugochiibem@gmail.com', 'subject', 'message');
-}
-
-/* 
+/*
 function createSpreadsheetEditTrigger(event) {
   var r = event.source.getActiveRange();
   if (r.getValue() == "yes") {
