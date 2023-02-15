@@ -562,8 +562,9 @@ function sendMail() {
   }
 }
 
-// what if we attach these triggers to the sheet of interest? This will be the perfect solution.
+// completeTransaction function contains all triggers for payTrack
 function completeTransaction() {
+  // Trigger to send mails to user's client.
   ScriptApp.newTrigger('sendMail')
     .timeBased()
     .atHour(7)
@@ -571,12 +572,15 @@ function completeTransaction() {
     .everyDays(1)
     .create();
 
+  // Trigger to complete transaction after invoice is marked as paid
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   ScriptApp.newTrigger('completetrans')
     .forSpreadsheet(ss)
     .onEdit()
     .create();
 
+  // Since this trigger should be installed once, this notification
+  // lets the user know that they've triggered it successfully.
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Hi, you've successfully installed triggers, do not click on this button again`))
