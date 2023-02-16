@@ -514,10 +514,14 @@ function copyTemplateOne() {
   var source = SpreadsheetApp.getActiveSpreadsheet();
 
   var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
-  let sheet = destination.getSheets()[0]
+  let sheet = destination.getSheets()[0];
+
+  // delete invoicegen file
+  let invSheet = source.getSheetByName('Invoicegen');
+  SpreadsheetApp.getActiveSpreadsheet().deleteSheet(invSheet);
 
   // copy to PayTrack template
-  sheet.copyTo(source);
+  sheet.copyTo(source).setName('Invoicegen');
 
   // call invoice card.
   let card = invcard.build();
