@@ -529,15 +529,57 @@ function copyTemplateOne() {
 }
 
 function copyTemplateTwo() {
+  var source = SpreadsheetApp.getActiveSpreadsheet();
 
+  var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
+  let sheet = destination.getSheets()[1];
+
+  // delete invoicegen file
+  let invSheet = source.getSheetByName('Invoicegen');
+  SpreadsheetApp.getActiveSpreadsheet().deleteSheet(invSheet);
+
+  // copy to PayTrack template
+  sheet.copyTo(source).setName('Invoicegen');
+
+  // call invoice card.
+  let card = invcard.build();
+  return card;
 }
 
 function copyTemplateThree() {
+var source = SpreadsheetApp.getActiveSpreadsheet();
 
+  var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
+  let sheet = destination.getSheets()[2];
+
+  // delete invoicegen file
+  let invSheet = source.getSheetByName('Invoicegen');
+  SpreadsheetApp.getActiveSpreadsheet().deleteSheet(invSheet);
+
+  // copy to PayTrack template
+  sheet.copyTo(source).setName('Invoicegen');
+
+  // call invoice card.
+  let card = invcard.build();
+  return card;
 }
 
 function copyTemplateFour() {
+var source = SpreadsheetApp.getActiveSpreadsheet();
 
+  var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
+  let sheet = destination.getSheets()[3];
+
+  // delete invoicegen file
+  let invSheet = source.getSheetByName('Invoicegen');
+  SpreadsheetApp.getActiveSpreadsheet().deleteSheet(invSheet);
+
+  // copy to PayTrack template
+  sheet.copyTo(source).setName('Invoicegen');
+
+  // call invoice card.
+  let card = invcard.build();
+  return card;
 }
 
 // function to send email everyday about due invoice to user's client.
