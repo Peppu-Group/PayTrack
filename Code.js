@@ -54,7 +54,7 @@ var email = CardService.newTextInput()
   .setTitle(`Client Email`);
 
 var postInvoice = CardService.newAction()
-  .setFunctionName('postInvoice');
+  .setFunctionName('viewInvoice');
 var newpostInvoiceButton = CardService.newTextButton()
   .setText('View Invoice')
   .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
@@ -65,7 +65,7 @@ var invoiceName = CardService.newTextInput()
   .setFieldName('Invoice Name')
   .setTitle('Invoice Name');
 var sendInvoice = CardService.newAction()
-  .setFunctionName('sendInvoice');
+  .setFunctionName('sndInvoice');
 var newInvoiceButton = CardService.newTextButton()
   .setText('Send Invoice')
   .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
@@ -91,7 +91,7 @@ var invcard = CardService.newCardBuilder()
   .addSection(sendInvoiceSection);
 
 
-function sendInvoice(e) {
+function sndInvoice(e) {
   var res = e['formInput'];
   var invoiceName = res['Invoice Name'] ? res['Invoice Name'] : 'Invoice';
 
@@ -237,7 +237,7 @@ function template() {
     .setTitle("Selected Template")
     .setNumColumns(2)
     .addItem(CardService.newGridItem()
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')));
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img1-peppu.jpg')));
   selectInvoiceSection.addWidget(selectedGrid);
 
   /*if () {
@@ -261,19 +261,19 @@ function template() {
     .addItem(CardService.newGridItem()
       .setTitle("X1")
       .setIdentifier("001")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img1-peppu.jpg')))
     .addItem(CardService.newGridItem()
       .setTitle("X2")
       .setIdentifier("002")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/invoice_template_page_1.png')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img2-peppu.jpg')))
     .addItem(CardService.newGridItem()
       .setTitle("Y3")
       .setIdentifier("003")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Wide-Margin-Excel-Invoice-Template.png')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')))
     .addItem(CardService.newGridItem()
       .setTitle("Y4")
       .setIdentifier("004")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/6271a4e4cfea70cec0004fee_Freelancer-Invoice-Template2-DB.jpeg')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img4-peppu.jpg')))
 
   selectInvoiceSection.addWidget(grid);
 
@@ -322,7 +322,7 @@ function copyFile(e) {
     .build();
 }
 
-function postInvoice(e) {
+function viewInvoice(e) {
   var res = e['formInput'];
   var contactName = res['Contact Name'] ? res['Contact Name'] : '';
   var clientName = res['Client Company'] ? res['Client Company'] : '';
@@ -349,6 +349,22 @@ function postInvoice(e) {
 
   const formattedToday = yyyy + '/' + mm + '/' + dd;
 
+  var coyName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C11:I11").getValue();
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B2:D2").setValue(coyName);
+  var coyAddr = SpreadsheetApp.getActiveSheet().getRange("Instructions!C12:I12").getValue();
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B3:D3").setValue(coyAddr);
+  var phoneNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C13:I13").getValue();
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B5:D5").setValue(phoneNum);
+  var bankName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C14:I14").getValue(); 
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C35:F35").setValue(bankName);
+  var acctNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C15:I15").getValue(); 
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C37:F37").setValue(acctNum);
+  var acctName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C16:I16").getValue(); 
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C36:F36").setValue(acctName);
+  var routingNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C17:I17").getValue(); 
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C38:F38").setValue(routingNum);
+  var paymentMthd = SpreadsheetApp.getActiveSheet().getRange("Instructions!C18:I18").getValue(); 
+  SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C39:F39").setValue(paymentMthd)
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B10").setValue(contactName);
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B11").setValue(clientName);
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B12").setValue(clientAddress);
@@ -422,7 +438,7 @@ function testGrid(e) {
       .setTitle("Selected Template")
       .setNumColumns(2)
       .addItem(CardService.newGridItem()
-        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')));
+        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img1-peppu.jpg')));
     selectInvoiceSection.addWidget(selectedGrid);
 
     var buttonAction = CardService.newAction()
@@ -435,7 +451,7 @@ function testGrid(e) {
       .setTitle("Selected Template")
       .setNumColumns(2)
       .addItem(CardService.newGridItem()
-        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/invoice_template_page_1.png')));
+        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img2-peppu.jpg')));
     selectInvoiceSection.addWidget(selectedGrid);
 
     var buttonAction = CardService.newAction()
@@ -449,7 +465,7 @@ function testGrid(e) {
       .setTitle("Selected Template")
       .setNumColumns(2)
       .addItem(CardService.newGridItem()
-        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Wide-Margin-Excel-Invoice-Template.png')));
+        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')));
     selectInvoiceSection.addWidget(selectedGrid);
 
     var buttonAction = CardService.newAction()
@@ -462,7 +478,7 @@ function testGrid(e) {
       .setTitle("Selected Template")
       .setNumColumns(2)
       .addItem(CardService.newGridItem()
-        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/6271a4e4cfea70cec0004fee_Freelancer-Invoice-Template2-DB.jpeg')));
+        .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img4-peppu.jpg')));
     selectInvoiceSection.addWidget(selectedGrid);
 
     var buttonAction = CardService.newAction()
@@ -482,19 +498,19 @@ function testGrid(e) {
     .addItem(CardService.newGridItem()
       .setTitle("X1")
       .setIdentifier("001")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img1-peppu.jpg')))
     .addItem(CardService.newGridItem()
       .setTitle("X2")
       .setIdentifier("002")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/invoice_template_page_1.png')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img2-peppu.jpg')))
     .addItem(CardService.newGridItem()
       .setTitle("Y3")
       .setIdentifier("003")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Wide-Margin-Excel-Invoice-Template.png')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/Invoice-Template-3.jpg')))
     .addItem(CardService.newGridItem()
       .setTitle("Y4")
       .setIdentifier("004")
-      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/6271a4e4cfea70cec0004fee_Freelancer-Invoice-Template2-DB.jpeg')))
+      .setImage(CardService.newImageComponent().setImageUrl('https://www.linkpicture.com/q/img4-peppu.jpg')))
 
   selectInvoiceSection.addWidget(grid);
 
