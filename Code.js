@@ -614,7 +614,12 @@ function sendMail() {
       var subject = 'Invoice Due';
       var date = row[0];
       /* Change PayTrack to the name of the user or their firm. */
-      var message = `You have an unpaid invoice for PayTrack due for ${date}`;
+      var coyName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C11:I11").getValue();
+      // You have an unpaid invoice for {} via paytrack.
+      // you have few days left to pay the invoice as it is due on ...
+      // Your invoice is due today
+      // Your invoice is past the due date.
+      var message = `You have an unpaid invoice for ${coyName} via PayTrack due for ${date}`;
       try {
         // send email to client.
         MailApp.sendEmail(emailAddress, subject, message);
