@@ -609,7 +609,11 @@ function sendMail() {
   // loop through to get all values
   for (i in data) {
     var row = data[i];
-    if (row[2] == 'no') {
+    let tDate = new Date();
+    let cDate = new Date(row[0]);
+    let diff = Math.abs(tDate.valueOf() - cDate.valueOf());
+    let difference = (diff / (1000 * 60 * 60 * 24));
+    if (row[2] == 'no' && difference <= 3 ) {
       var emailAddress = row[1];
       var subject = 'Invoice Due';
       var date = row[0];
