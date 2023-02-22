@@ -104,9 +104,7 @@ function sndInvoice(e) {
       sheets[i].hideSheet()
     }
   }
-  for (var i = 0; i < sheets.length; i++) {
-    sheets[i].showSheet()
-  }
+
 
   //or send as email
   var email = SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B13").getValue();
@@ -121,6 +119,10 @@ function sndInvoice(e) {
       mimeType: "application/pdf"
     }]
   })
+
+  for (var i = 0; i < sheets.length; i++) {
+    sheets[i].showSheet()
+  }
 
   // send info to invoice template record.
   var date = SpreadsheetApp.getActiveSheet().getRange("Invoicegen!F10").getDisplayValue();
@@ -137,9 +139,10 @@ function sndInvoice(e) {
         date,
         invoiceNum,
         description,
-        dueDate,
         amount,
-        email
+        dueDate,
+        email,
+        'no'
       ]
     ]
   }
@@ -287,28 +290,39 @@ function template() {
 
 
 function onSheet() {
-  var buttonAction = CardService.newAction()
-    .setFunctionName('template');
-  navigationSection.addWidget(CardService.newDecoratedText()
-    .setBottomLabel("Create, Send and Track Invoices")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
-    .setText('Invoice Actions')
-    .setOnClickAction(buttonAction));
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+  if (sheet.getName() == 'Instructions') {
+    var buttonAction = CardService.newAction()
+      .setFunctionName('template');
+    navigationSection.addWidget(CardService.newDecoratedText()
+      .setBottomLabel("Create, Send and Track Invoices")
+      .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
+      .setText('Invoice Actions')
+      .setOnClickAction(buttonAction));
 
-  var buttonAction = CardService.newAction()
-    .setFunctionName('transaction');
-  navigationSection.addWidget(CardService.newDecoratedText()
-    .setBottomLabel("Record Transactions in Sheet")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
-    .setText('Transaction Actions')
-    .setOnClickAction(buttonAction));
+    var buttonAction = CardService.newAction()
+      .setFunctionName('transaction');
+    navigationSection.addWidget(CardService.newDecoratedText()
+      .setBottomLabel("Record Transactions in Sheet")
+      .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
+      .setText('Transaction Actions')
+      .setOnClickAction(buttonAction));
 
-  var card = CardService.newCardBuilder()
-    .setName("Card name")
-    .setHeader(CardService.newCardHeader().setTitle("Perform all bookkeeping actions in your sheet").setImageUrl('https://www.linkpicture.com/q/32x32-google.png'))
-    .addSection(navigationSection)
-    .build();
-  return card;
+    var card = CardService.newCardBuilder()
+      .setName("Card name")
+      .setHeader(CardService.newCardHeader().setTitle("Perform all bookkeeping actions in your sheet").setImageUrl('https://www.linkpicture.com/q/32x32-google.png'))
+      .addSection(navigationSection)
+      .build();
+    return card;
+  } else {
+    navigationSection.addWidget(CardService.newDecoratedText().setText(`Heyya!! You can't use PayTrack with this Spreadsheet. Please create a new Spreadsheet from our icon in your Drive (The Sidebar, just like in your Spreadsheet) or open a Spreadsheet which has our template. Contact peppubooks@gmail.com if you have any challenge.`).setWrapText(true))
+    var card = CardService.newCardBuilder()
+      .setName("Card name")
+      .setHeader(CardService.newCardHeader().setTitle("Perform all bookkeeping actions in your sheet").setImageUrl('https://www.linkpicture.com/q/32x32-google.png'))
+      .addSection(navigationSection)
+      .build();
+    return card;
+  }
 }
 
 function copyFile(e) {
@@ -355,15 +369,15 @@ function viewInvoice(e) {
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B3:D3").setValue(coyAddr);
   var phoneNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C13:I13").getValue();
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B5:D5").setValue(phoneNum);
-  var bankName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C14:I14").getValue(); 
+  var bankName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C14:I14").getValue();
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C35:F35").setValue(bankName);
-  var acctNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C15:I15").getValue(); 
+  var acctNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C15:I15").getValue();
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C37:F37").setValue(acctNum);
-  var acctName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C16:I16").getValue(); 
+  var acctName = SpreadsheetApp.getActiveSheet().getRange("Instructions!C16:I16").getValue();
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C36:F36").setValue(acctName);
-  var routingNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C17:I17").getValue(); 
+  var routingNum = SpreadsheetApp.getActiveSheet().getRange("Instructions!C17:I17").getValue();
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C38:F38").setValue(routingNum);
-  var paymentMthd = SpreadsheetApp.getActiveSheet().getRange("Instructions!C18:I18").getValue(); 
+  var paymentMthd = SpreadsheetApp.getActiveSheet().getRange("Instructions!C18:I18").getValue();
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!C39:F39").setValue(paymentMthd)
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B10").setValue(contactName);
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B11").setValue(clientName);
@@ -538,7 +552,6 @@ function copyTemplateOne() {
 
   // copy to PayTrack template
   sheet.copyTo(source).setName('Invoicegen');
-
   // call invoice card.
   let card = invcard.build();
   return card;
@@ -563,7 +576,7 @@ function copyTemplateTwo() {
 }
 
 function copyTemplateThree() {
-var source = SpreadsheetApp.getActiveSpreadsheet();
+  var source = SpreadsheetApp.getActiveSpreadsheet();
 
   var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
   let sheet = destination.getSheets()[2];
@@ -581,7 +594,7 @@ var source = SpreadsheetApp.getActiveSpreadsheet();
 }
 
 function copyTemplateFour() {
-var source = SpreadsheetApp.getActiveSpreadsheet();
+  var source = SpreadsheetApp.getActiveSpreadsheet();
 
   var destination = SpreadsheetApp.openById("1yRfnRiEGX9LmkkaqFFEnouQ1LyBJJkOGxgeYUsepEHg");
   let sheet = destination.getSheets()[3];
@@ -613,7 +626,7 @@ function sendMail() {
     let cDate = new Date(row[0]);
     let diff = Math.abs(tDate.valueOf() - cDate.valueOf());
     let difference = (diff / (1000 * 60 * 60 * 24));
-    if (row[2] == 'no' && difference <= 3 ) {
+    if (row[2] == 'no' && difference <= 3) {
       var emailAddress = row[1];
       var subject = 'Invoice Due';
       var date = row[0];
@@ -623,7 +636,7 @@ function sendMail() {
       // you have few days left to pay the invoice as it is due on ...
       // Your invoice is due today
       // Your invoice is past the due date.
-      var message = `You have an unpaid invoice for ${coyName} via PayTrack due for ${date}`;
+      var message = `You have an unpaid invoice for ${coyName} via PayTrack (https://workspace.google.com/marketplace/app/paytrack/913987535189) due for ${date}`;
       try {
         // send email to client.
         MailApp.sendEmail(emailAddress, subject, message);
