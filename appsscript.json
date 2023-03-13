@@ -34,6 +34,10 @@
         {
           "label": "Transaction Trigger",
           "runFunction": "completeTransaction"
+        },
+        {
+          "label": "Home Page",
+          "runFunction": "onSheet"
         }
       ]
     },
@@ -47,5 +51,9 @@
         "runFunction": "onDrive"
       }
     }
+  },
+  "webapp": {
+    "executeAs": "USER_ACCESSING",
+    "access": "ANYONE"
   }
 }

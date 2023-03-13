@@ -315,11 +315,23 @@ function onSheet() {
       .build();
     return card;
   } else {
-    navigationSection.addWidget(CardService.newDecoratedText().setText(`Heyya!! You can't use PayTrack with this Spreadsheet. Please create a new Spreadsheet from our icon in your Drive (The Sidebar, just like in your Spreadsheet) or open a Spreadsheet which has our template. Contact peppubooks@gmail.com if you have any challenge.`).setWrapText(true))
+    newSheetSection.addWidget(CardService.newDecoratedText().setText(`Heyya!! You can't use PayTrack with this Spreadsheet. Please create a new Spreadsheet from the section below or open a Spreadsheet which has our template. Contact peppubooks@gmail.com if you have any challenge.`).setWrapText(true))
+
+    var sheetName = CardService.newTextInput()
+      .setFieldName('Sheet Name')
+      .setTitle('Sheet Name');
+    var createNewSheet = CardService.newAction()
+      .setFunctionName('copyFile');
+    var newSheetButton = CardService.newTextButton()
+      .setText('Create New Sheet')
+      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+      .setOnClickAction(createNewSheet);
+
+    newSheetSection.addWidget(sheetName);
+    newSheetSection.addWidget(CardService.newButtonSet().addButton(newSheetButton));
+
     var card = CardService.newCardBuilder()
-      .setName("Card name")
-      .setHeader(CardService.newCardHeader().setTitle("Perform all bookkeeping actions in your sheet").setImageUrl('https://www.linkpicture.com/q/32x32-google.png'))
-      .addSection(navigationSection)
+      .addSection(newSheetSection)
       .build();
     return card;
   }
