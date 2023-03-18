@@ -315,7 +315,7 @@ function onSheet() {
       .build();
     return card;
   } else {
-    newSheetSection.addWidget(CardService.newDecoratedText().setText(`Heyya!! You can't use PayTrack with this Spreadsheet. Please create a new Spreadsheet from the section below or open a Spreadsheet which has our template. Contact peppubooks@gmail.com if you have any challenge.`).setWrapText(true))
+    newSheetSection.addWidget(CardService.newDecoratedText().setText(`Heyya!! You can't use PayTrack with this Spreadsheet. Please create a new Spreadsheet and start accounting from the new Sheet. Contact peppubooks@gmail.com if you have any challenge.`).setWrapText(true))
 
     var sheetName = CardService.newTextInput()
       .setFieldName('Sheet Name')
