@@ -322,7 +322,7 @@ function onSheet() {
       .setFieldName('Sheet Name')
       .setTitle('Sheet Name');
     var createNewSheet = CardService.newAction()
-      .setFunctionName('copyFile');
+      .setFunctionName('copySheet');
     var newSheetButton = CardService.newTextButton()
       .setText('Create New Sheet')
       .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
