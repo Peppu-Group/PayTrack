@@ -349,6 +349,18 @@ function copyFile(e) {
     .build() && createFile();
 }
 
+function copySheet(e) {
+  var res = e['formInput'];
+  var sheetName = res['Sheet Name'] ? res['Sheet Name'] : '';
+  let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
+  let file = Drive.Files.copy({ title: sheetName }, id);
+  let new_file_id = file.id();
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly created the file ${sheetName}`))
+    .build() && openUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`);
+}
+
 function openUrl( url ){
   var html = HtmlService.createHtmlOutput('<!DOCTYPE html><html><script>'
   +'window.close = function(){window.setTimeout(function(){google.script.host.close()},9)};'
