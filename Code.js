@@ -774,3 +774,7 @@ function completetrans() {
     }
   }
 }
+
+function onDocs() {
+  openUrl(`https://peppubooks.com`);
+}
