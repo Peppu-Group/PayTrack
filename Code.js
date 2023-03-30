@@ -164,6 +164,11 @@ function sndInvoice(e) {
 
 
 function onDrive() {
+  return createFile();
+}
+
+
+function createFile() {
   var sheetName = CardService.newTextInput()
     .setFieldName('Sheet Name')
     .setTitle('Sheet Name');
@@ -182,10 +187,6 @@ function onDrive() {
     .addSection(newSheetSection)
     .build();
   return card;
-}
-
-function invoice() {
-
 }
 
 function transaction() {
@@ -345,7 +346,7 @@ function copyFile(e) {
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly created the file ${sheetName}`))
-    .build();
+    .build() && createFile();
 }
 
 function viewInvoice(e) {
