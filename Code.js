@@ -442,6 +442,8 @@ function viewInvoice(e) {
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!F9").setValue(`INV${invNumber}`);
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!B35:F35").setValue(payTerms);
   SpreadsheetApp.getActiveSheet().getRange("Invoicegen!F10").setValue(formattedToday);
+
+  return invoice_card();
 }
 
 function submitRecord(e) {
