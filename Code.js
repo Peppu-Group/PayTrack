@@ -489,7 +489,7 @@ function submitRecord(e) {
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly Recorded Transaction`))
-    .build();
+    .build() && transaction_card();
 
 }
 
