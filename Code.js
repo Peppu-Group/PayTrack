@@ -164,7 +164,7 @@ function sndInvoice(e) {
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly sent invoice to ${email}`))
-    .build();
+    .build() && invoice_card();
 }
 
 
