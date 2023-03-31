@@ -623,8 +623,7 @@ function copyTemplateTwo() {
   sheet.copyTo(source).setName('Invoicegen');
 
   // call invoice card.
-  let card = invcard.build();
-  return card;
+  return invoice_card();
 }
 
 function copyTemplateThree() {
