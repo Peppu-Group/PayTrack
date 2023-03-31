@@ -4,13 +4,11 @@
 const sheetName = 'Invoice'
 const scriptProp = PropertiesService.getScriptProperties()
 
-function initialSetup () {
-  let file = DriveApp.getFilesByName('Accounting').next();
-  const activeSpreadsheet = SpreadsheetApp.open(file)
-  scriptProp.setProperty('key', activeSpreadsheet.getId())
-}
-
 function doPost (e) {
+  let file = DriveApp.getFilesByName('Accounting').next();
+  const activeSpreadsheet = SpreadsheetApp.open(file);
+  scriptProp.setProperty('key', activeSpreadsheet.getId())
+  
   const lock = LockService.getScriptLock()
   lock.tryLock(10000)
 
@@ -18,11 +16,12 @@ function doPost (e) {
     const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'))
     const sheet = doc.getSheetByName(sheetName)
 
-    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
+    const headers = sheet.getRange(2, 1, 1, sheet.getLastColumn()).getValues()[0]
     const nextRow = sheet.getLastRow() + 1
 
     const newRow = headers.map(function(header) {
-      return header === 'Date' ? new Date() : e.parameter[header]
+      const invNumber = Math.floor(100000 + Math.random() * 900000);
+      return header === 'Date' ? new Date() : header === 'Invoice No.' ? `INV${invNumber}` : e.parameter[header]
     })
 
     sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow])
