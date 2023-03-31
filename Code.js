@@ -18,77 +18,83 @@ const INPUT_MAP = [
   { text: 'Services', val: 'Services' },
 ]
 
-/*The reason we're writing this out, is so that we can call the invcard build function
-  anywhere. */
-// create invoice
-var contactName = CardService.newTextInput()
-  .setFieldName(`Contact Name`)
-  .setTitle(`Receiver's name`);
+function invoice_card() {
 
-var clientName = CardService.newTextInput()
-  .setFieldName(`Client Company`)
-  .setTitle(`Client Company's Name`);
+  /*The reason we're writing this out, is so that we can call the invcard build function
+    anywhere. */
+  // create invoice
+  var contactName = CardService.newTextInput()
+    .setFieldName(`Contact Name`)
+    .setTitle(`Receiver's name`);
 
-var clientAddress = CardService.newTextInput()
-  .setFieldName(`Client Address`)
-  .setTitle(`Client Company's Address`);
+  var clientName = CardService.newTextInput()
+    .setFieldName(`Client Company`)
+    .setTitle(`Client Company's Name`);
 
-var dueDate = CardService.newDatePicker()
-  .setFieldName('Due Date')
-  .setTitle('Due Date')
+  var clientAddress = CardService.newTextInput()
+    .setFieldName(`Client Address`)
+    .setTitle(`Client Company's Address`);
 
-var paymentTerms = CardService.newTextInput()
-  .setFieldName(`PayTerms`)
-  .setTitle(`Warranty, returns policy...`);
+  var dueDate = CardService.newDatePicker()
+    .setFieldName('Due Date')
+    .setTitle('Due Date')
 
-var totalTax = CardService.newTextInput()
-  .setFieldName(`Tax`)
-  .setTitle(`Total Tax (Optional)`);
+  var paymentTerms = CardService.newTextInput()
+    .setFieldName(`PayTerms`)
+    .setTitle(`Warranty, returns policy...`);
 
-var discount = CardService.newTextInput()
-  .setFieldName(`Discount`)
-  .setTitle(`Discount (Optional)`);
+  var totalTax = CardService.newTextInput()
+    .setFieldName(`Tax`)
+    .setTitle(`Total Tax (Optional)`);
 
-var email = CardService.newTextInput()
-  .setFieldName(`Client Email`)
-  .setTitle(`Client Email`);
+  var discount = CardService.newTextInput()
+    .setFieldName(`Discount`)
+    .setTitle(`Discount (Optional)`);
 
-var postInvoice = CardService.newAction()
-  .setFunctionName('viewInvoice');
-var newpostInvoiceButton = CardService.newTextButton()
-  .setText('View Invoice')
-  .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-  .setOnClickAction(postInvoice);
+  var email = CardService.newTextInput()
+    .setFieldName(`Client Email`)
+    .setTitle(`Client Email`);
 
-// send invoice to user.
-var invoiceName = CardService.newTextInput()
-  .setFieldName('Invoice Name')
-  .setTitle('Invoice Name');
-var sendInvoice = CardService.newAction()
-  .setFunctionName('sndInvoice');
-var newInvoiceButton = CardService.newTextButton()
-  .setText('Send Invoice')
-  .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-  .setOnClickAction(sendInvoice);
+  var postInvoice = CardService.newAction()
+    .setFunctionName('viewInvoice');
+  var newpostInvoiceButton = CardService.newTextButton()
+    .setText('View Invoice')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    .setOnClickAction(postInvoice);
 
-invoiceSection.addWidget(contactName);
-invoiceSection.addWidget(clientName);
-invoiceSection.addWidget(email);
-invoiceSection.addWidget(clientAddress);
-invoiceSection.addWidget(dueDate);
-invoiceSection.addWidget(discount);
-invoiceSection.addWidget(totalTax);
-invoiceSection.addWidget(paymentTerms);
-invoiceSection.addWidget(CardService.newButtonSet().addButton(newpostInvoiceButton));
+  // send invoice to user.
+  var invoiceName = CardService.newTextInput()
+    .setFieldName('Invoice Name')
+    .setTitle('Invoice Name');
+  var sendInvoice = CardService.newAction()
+    .setFunctionName('sndInvoice');
+  var newInvoiceButton = CardService.newTextButton()
+    .setText('Send Invoice')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    .setOnClickAction(sendInvoice);
 
-sendInvoiceSection.addWidget(invoiceName);
-sendInvoiceSection.addWidget(CardService.newButtonSet().addButton(newInvoiceButton));
+  invoiceSection.addWidget(contactName);
+  invoiceSection.addWidget(clientName);
+  invoiceSection.addWidget(email);
+  invoiceSection.addWidget(clientAddress);
+  invoiceSection.addWidget(dueDate);
+  invoiceSection.addWidget(discount);
+  invoiceSection.addWidget(totalTax);
+  invoiceSection.addWidget(paymentTerms);
+  invoiceSection.addWidget(CardService.newButtonSet().addButton(newpostInvoiceButton));
 
-var invcard = CardService.newCardBuilder()
-  .setName("Card name")
-  .setHeader(CardService.newCardHeader().setTitle("Create, Send and Track Invoices"))
-  .addSection(invoiceSection)
-  .addSection(sendInvoiceSection);
+  sendInvoiceSection.addWidget(invoiceName);
+  sendInvoiceSection.addWidget(CardService.newButtonSet().addButton(newInvoiceButton));
+
+  var invcard = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("Create, Send and Track Invoices"))
+    .addSection(invoiceSection)
+    .addSection(sendInvoiceSection);
+
+  let card = invcard.build();
+  return card;
+}
 
 
 function sndInvoice(e) {
@@ -365,23 +371,23 @@ function copySheet(e) {
     .build() && openUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`);
 }
 
-function openUrl( url ){
+function openUrl(url) {
   var html = HtmlService.createHtmlOutput('<!DOCTYPE html><html><script>'
-  +'window.close = function(){window.setTimeout(function(){google.script.host.close()},9)};'
-  +'var a = document.createElement("a"); a.href="'+url+'"; a.target="_blank";'
-  +'if(document.createEvent){'
-  +'  var event=document.createEvent("MouseEvents");'
-  +'  if(navigator.userAgent.toLowerCase().indexOf("firefox")>-1){window.document.body.append(a)}'                          
-  +'  event.initEvent("click",true,true); a.dispatchEvent(event);'
-  +'}else{ a.click() }'
-  +'close();'
-  +'</script>'
-  // Offer URL as clickable link in case above code fails.
-  +'<body style="word-break:break-word;font-family:sans-serif;">Failed to open automatically.  Click below:<br/><a href="'+url+'" target="_blank" onclick="window.close()">Click here to proceed</a>.</body>'
-  +'<script>google.script.host.setHeight(55);google.script.host.setWidth(410)</script>'
-  +'</html>')
-  .setWidth( 90 ).setHeight( 1 );
-  SpreadsheetApp.getUi().showModalDialog( html, "Opening ..." );
+    + 'window.close = function(){window.setTimeout(function(){google.script.host.close()},9)};'
+    + 'var a = document.createElement("a"); a.href="' + url + '"; a.target="_blank";'
+    + 'if(document.createEvent){'
+    + '  var event=document.createEvent("MouseEvents");'
+    + '  if(navigator.userAgent.toLowerCase().indexOf("firefox")>-1){window.document.body.append(a)}'
+    + '  event.initEvent("click",true,true); a.dispatchEvent(event);'
+    + '}else{ a.click() }'
+    + 'close();'
+    + '</script>'
+    // Offer URL as clickable link in case above code fails.
+    + '<body style="word-break:break-word;font-family:sans-serif;">Failed to open automatically.  Click below:<br/><a href="' + url + '" target="_blank" onclick="window.close()">Click here to proceed</a>.</body>'
+    + '<script>google.script.host.setHeight(55);google.script.host.setWidth(410)</script>'
+    + '</html>')
+    .setWidth(90).setHeight(1);
+  SpreadsheetApp.getUi().showModalDialog(html, "Opening ...");
 }
 
 function viewInvoice(e) {
