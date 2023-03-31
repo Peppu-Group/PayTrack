@@ -19,7 +19,6 @@ const INPUT_MAP = [
 ]
 
 function invoice_card() {
-
   /*The reason we're writing this out, is so that we can call the invcard build function
     anywhere. */
   // create invoice
@@ -607,8 +606,7 @@ function copyTemplateOne() {
   // copy to PayTrack template
   sheet.copyTo(source).setName('Invoicegen');
   // call invoice card.
-  let card = invcard.build();
-  return card;
+  return invoice_card();
 }
 
 function copyTemplateTwo() {
