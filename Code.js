@@ -190,6 +190,10 @@ function createFile() {
 }
 
 function transaction() {
+  return transaction_card();
+}
+
+function transaction_card() {
   var description = CardService.newTextInput()
     .setFieldName('Description')
     .setTitle('Description');
