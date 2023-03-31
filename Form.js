@@ -21,7 +21,7 @@ function doPost (e) {
 
     const newRow = headers.map(function(header) {
       const invNumber = Math.floor(100000 + Math.random() * 900000);
-      return header === 'Date' ? new Date() : header === 'Invoice No.' ? `INV${invNumber}` : e.parameter[header]
+      return header === 'Date' ? new Date() : header === 'Invoice No.' ? `INV${invNumber}` : header === 'Due Date' ? new Date() : e.parameter[header]
     })
 
     sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow])
