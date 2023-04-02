@@ -246,6 +246,15 @@ function transaction_card() {
 }
 
 function template() {
+    var currentButton = CardService.newAction()
+    .setFunctionName('invoice_card');
+  var newSheetButton = CardService.newTextButton()
+    .setText('Use Default Template')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    .setOnClickAction(currentButton);
+
+  selectInvoiceSection.addWidget(CardService.newButtonSet().addButton(newSheetButton));
+
   var selectedGrid = CardService.newGrid()
     .setTitle("Selected Template")
     .setNumColumns(2)
