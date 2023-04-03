@@ -3,6 +3,7 @@ const PAYMENT_METHOD = 'Payment Method';
 const BUYING_PRICE = 'Buying Price';
 const EXP_CATEGORY = 'Choose Expense Category';
 const INFLOW_CATEGORY = 'Choose Inflow Category';
+const LOAN_CATEGORY ='Choose Loan Receiving Method';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -218,7 +219,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Money In
   var buttonAction = CardService.newAction()
-    .setFunctionName('inflowCard');
+    .setFunctionName('innerflowCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Incoming Funds")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
@@ -234,7 +235,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Loan
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('loanCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record and Manage Loans")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
@@ -245,14 +246,6 @@ function transaction() {
     .setName("Card name")
     .setHeader(CardService.newCardHeader().setTitle("Record all bookkeeping actions in your sheet").setImageUrl('https://www.linkpicture.com/q/32x32-google.png'))
     .addSection(transactionSection)
-    .build();
-  return card;
-}
-
-function wip() {
-  var card = CardService.newCardBuilder()
-    .setName("Card name")
-    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
     .build();
   return card;
 }
@@ -414,11 +407,17 @@ function expenseCard() {
 
 function expAction() { }
 
-function inflowCard() {
+function innerflowCard() {
   return inflowCard(INFLOW_CATEGORY, inAction)
 }
 
 function inAction() { }
+
+function loanCard() {
+  return inflowCard(LOAN_CATEGORY, loanAction)
+}
+
+function loanAction() { }
 
 function template() {
   var currentButton = CardService.newAction()
