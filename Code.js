@@ -201,7 +201,7 @@ function transaction() {
   var buttonAction = CardService.newAction()
     .setFunctionName('a');
   transactionSection.addWidget(CardService.newDecoratedText()
-    .setBottomLabel("Record Money In transaction")
+    .setBottomLabel("Record Incoming Funds")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-3.png'))
     .setText('Money In (Income)')
     .setOnClickAction(buttonAction));
@@ -209,7 +209,7 @@ function transaction() {
   var buttonAction = CardService.newAction()
     .setFunctionName('b');
   transactionSection.addWidget(CardService.newDecoratedText()
-    .setBottomLabel("Record Money Out transaction")
+    .setBottomLabel("Record Outgoing Expenses")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-2_3.png'))
     .setText('Money Out (Expenses)')
     .setOnClickAction(buttonAction));
