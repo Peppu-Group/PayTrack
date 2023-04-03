@@ -199,7 +199,7 @@ function transaction() {
   // create three sections with 3 cards.
   // Money In
   var buttonAction = CardService.newAction()
-    .setFunctionName('a');
+    .setFunctionName('wip');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Incoming Funds")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-3.png'))
@@ -207,7 +207,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Money out
   var buttonAction = CardService.newAction()
-    .setFunctionName('b');
+    .setFunctionName('wip');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Outgoing Expenses")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-2_3.png'))
@@ -215,7 +215,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Loan
   var buttonAction = CardService.newAction()
-    .setFunctionName('c');
+    .setFunctionName('wip');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record and Manage Loans")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
@@ -226,6 +226,14 @@ function transaction() {
     .setName("Card name")
     .setHeader(CardService.newCardHeader().setTitle("Record all bookkeeping actions in your sheet").setImageUrl('https://www.linkpicture.com/q/32x32-google.png'))
     .addSection(transactionSection)
+    .build();
+  return card;
+}
+
+function wip() {
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
     .build();
   return card;
 }
