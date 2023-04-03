@@ -199,23 +199,23 @@ function transaction() {
   // create three sections with 3 cards.
   // Money In
   var buttonAction = CardService.newAction()
-    .setFunctionName('');
+    .setFunctionName('a');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Money In transaction")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
-    .setText('Money In')
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-3.png'))
+    .setText('Money In (Income)')
     .setOnClickAction(buttonAction));
   // Money out
   var buttonAction = CardService.newAction()
-    .setFunctionName('');
+    .setFunctionName('b');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Money Out transaction")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
-    .setText('Money Out')
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-2_3.png'))
+    .setText('Money Out (Expenses)')
     .setOnClickAction(buttonAction));
   // Loan
   var buttonAction = CardService.newAction()
-    .setFunctionName('');
+    .setFunctionName('c');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record and Manage Loans")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
