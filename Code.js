@@ -792,5 +792,5 @@ function completetrans() {
 }
 
 function onDocs() {
-  openUrl(`https://peppubooks.com`);
+  openUrl(`https://docs.peppubooks.com`);
 }
