@@ -214,6 +214,13 @@ function transaction() {
       .setText('Money Out')
       .setOnClickAction(buttonAction));
   // Loan
+  var buttonAction = CardService.newAction()
+      .setFunctionName('');
+    transactionSection.addWidget(CardService.newDecoratedText()
+      .setBottomLabel("Record and Manage Loans")
+      .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
+      .setText('Loans')
+      .setOnClickAction(buttonAction));
   return transaction_card();
 }
 
