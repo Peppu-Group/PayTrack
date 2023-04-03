@@ -206,6 +206,13 @@ function transaction() {
       .setText('Money In')
       .setOnClickAction(buttonAction));
   // Money out
+  var buttonAction = CardService.newAction()
+      .setFunctionName('');
+    transactionSection.addWidget(CardService.newDecoratedText()
+      .setBottomLabel("Record Money Out transaction")
+      .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
+      .setText('Money Out')
+      .setOnClickAction(buttonAction));
   // Loan
   return transaction_card();
 }
