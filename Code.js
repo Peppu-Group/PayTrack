@@ -218,7 +218,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Money In
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('inflowCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Incoming Funds")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
@@ -413,6 +413,12 @@ function expenseCard() {
 }
 
 function expAction() { }
+
+function inflowCard() {
+  return inflowCard(INFLOW_CATEGORY, inAction)
+}
+
+function inAction() { }
 
 function template() {
   var currentButton = CardService.newAction()
