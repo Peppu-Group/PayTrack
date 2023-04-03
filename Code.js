@@ -1,5 +1,6 @@
 const SELLING_PRICE = 'Selling Price';
 const PAYMENT_METHOD = 'Payment Method';
+const BUYING_PRICE = 'Buying Price';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -207,7 +208,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Buy
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('buyCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Restock Inventory")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
@@ -316,7 +317,7 @@ function itemCard(price, payment_method, funcAction) {
     .setFieldName(price)
     .setTitle(price);
 
-  var amount = CardService.newTextInput()
+  var quantity = CardService.newTextInput()
     .setFieldName('Quantity')
     .setTitle('Quantity');
 
@@ -331,6 +332,7 @@ function itemCard(price, payment_method, funcAction) {
   inputSheetSection.addWidget(item);
   inputSheetSection.addWidget(description);
   inputSheetSection.addWidget(amount);
+  inputSheetSection.addWidget(quantity);
   inputSheetSection.addWidget(debit);
 
 
@@ -355,6 +357,12 @@ function sellCard() {
 }
 
 function sellAction() { }
+
+function buyCard() {
+  return itemCard(BUYING_PRICE, PAYMENT_METHOD, buyAction)
+}
+
+function buyAction() { }
 
 function template() {
   var currentButton = CardService.newAction()
