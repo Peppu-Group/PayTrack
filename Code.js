@@ -1,6 +1,8 @@
 const SELLING_PRICE = 'Selling Price';
 const PAYMENT_METHOD = 'Payment Method';
 const BUYING_PRICE = 'Buying Price';
+const EXP_CATEGORY = 'Choose Expense Category';
+const INFLOW_CATEGORY = 'Choose Inflow Category';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -364,18 +366,18 @@ function buyCard() {
 
 function buyAction() { }
 
-function expenseCard() {
-  var expenseCategory = CardService.newSelectionInput().setTitle('Choose Expense Category')
-    .setFieldName('expenseCategory')
+function inflowCard(inflowTitle, inflowAction) {
+  var inflowCategory = CardService.newSelectionInput().setTitle(inflowTitle)
+    .setFieldName('Category')
     .setType(CardService.SelectionInputType.DROPDOWN);
 
   INPUT_MAP.forEach((language, index, array) => {
-    expenseCategory.addItem(language.text, language.val, language.val == true);
+    inflowCategory.addItem(language.text, language.val, language.val == true);
   })
 
   var title = CardService.newTextInput()
-    .setFieldName('Vendor Name')
-    .setTitle('Vendor Name');
+    .setFieldName(`Vendor Name`)
+    .setTitle(`Entity's Name`);
 
   var description = CardService.newTextInput()
     .setFieldName('Description')
@@ -385,7 +387,7 @@ function expenseCard() {
     .setFieldName('Amount')
     .setTitle('Amount');
 
-  inputSheetSection.addWidget(expenseCategory);
+  inputSheetSection.addWidget(inflowCategory);
   inputSheetSection.addWidget(title);
   inputSheetSection.addWidget(description);
   inputSheetSection.addWidget(amount);
@@ -394,7 +396,7 @@ function expenseCard() {
     .addButton(CardService.newTextButton()
       .setText('Record Transaction')
       .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setOnClickAction(CardService.newAction().setFunctionName('expAction'))
+      .setOnClickAction(CardService.newAction().setFunctionName(inflowAction))
       .setDisabled(false)));
 
   var card = CardService.newCardBuilder()
@@ -404,6 +406,10 @@ function expenseCard() {
     .addSection(buttonSheetSection)
     .build();
   return card;
+}
+
+function expenseCard() {
+  return inflowCard(EXP_CATEGORY, expAction)
 }
 
 function expAction() { }
