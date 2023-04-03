@@ -1,5 +1,5 @@
-const DEFAULT_INPUT_TEXT = '';
-const DEFAULT_OUTPUT_TEXT = '';
+const SELLING_PRICE = 'Selling Price';
+const PAYMENT_METHOD = 'Payment Method';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -303,42 +303,38 @@ function transaction_card() {
   return card;
 }
  */
-function transaction_card() {
+function item_card(price, payment_method, funcAction) {
+  var item = CardService.newTextInput()
+    .setFieldName('Item Name')
+    .setTitle('Item Name');
+
   var description = CardService.newTextInput()
     .setFieldName('Description')
     .setTitle('Description');
 
   var amount = CardService.newTextInput()
-    .setFieldName('Amount')
-    .setTitle('Amount');
+    .setFieldName(price)
+    .setTitle(price);
 
-  var debit = CardService.newSelectionInput().setTitle('From')
-    .setFieldName('Debit')
+  var debit = CardService.newSelectionInput().setTitle(payment_method)
+    .setFieldName(payment_method)
     .setType(CardService.SelectionInputType.DROPDOWN);
 
   INPUT_MAP.forEach((language, index, array) => {
     debit.addItem(language.text, language.val, language.val == true);
   })
 
-  var credit = CardService.newSelectionInput().setTitle('To')
-    .setFieldName('Credit')
-    .setType(CardService.SelectionInputType.DROPDOWN);
-
-  INPUT_MAP.forEach((language, index, array) => {
-    credit.addItem(language.text, language.val, language.val == true);
-  })
-
+  inputSheetSection.addWidget(item);
   inputSheetSection.addWidget(description);
   inputSheetSection.addWidget(amount);
   inputSheetSection.addWidget(debit);
-  inputSheetSection.addWidget(credit);
 
 
   buttonSheetSection.addWidget(CardService.newButtonSet()
     .addButton(CardService.newTextButton()
       .setText('Record Transaction')
       .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setOnClickAction(CardService.newAction().setFunctionName('submitRecord'))
+      .setOnClickAction(CardService.newAction().setFunctionName(funcAction))
       .setDisabled(false)));
 
   var card = CardService.newCardBuilder()
