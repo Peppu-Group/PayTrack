@@ -8,6 +8,7 @@ var invoiceSection = CardService.newCardSection();
 var navigationSection = CardService.newCardSection();
 var sendInvoiceSection = CardService.newCardSection();
 var selectInvoiceSection = CardService.newCardSection();
+var transactionSection = CardService.newCardSection();
 
 const INPUT_MAP = [
   { text: 'Bank', val: 'Bank' },
@@ -195,6 +196,17 @@ function createFile() {
 }
 
 function transaction() {
+  // create three sections with 3 cards.
+  // Money In
+  var buttonAction = CardService.newAction()
+      .setFunctionName('');
+    transactionSection.addWidget(CardService.newDecoratedText()
+      .setBottomLabel("Record Money In transaction")
+      .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
+      .setText('Money In')
+      .setOnClickAction(buttonAction));
+  // Money out
+  // Loan
   return transaction_card();
 }
 
