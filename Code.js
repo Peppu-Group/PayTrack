@@ -197,12 +197,28 @@ function createFile() {
 
 function transaction() {
   // create three sections with 3 cards.
+  // Sell
+  var buttonAction = CardService.newAction()
+    .setFunctionName('wip');
+  transactionSection.addWidget(CardService.newDecoratedText()
+    .setBottomLabel("Record Sales")
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
+    .setText('Sell')
+    .setOnClickAction(buttonAction));
+  // Buy
+  var buttonAction = CardService.newAction()
+    .setFunctionName('wip');
+  transactionSection.addWidget(CardService.newDecoratedText()
+    .setBottomLabel("Restock Inventory")
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
+    .setText('Buy')
+    .setOnClickAction(buttonAction));
   // Money In
   var buttonAction = CardService.newAction()
     .setFunctionName('wip');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Incoming Funds")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-3.png'))
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
     .setText('Money In (Income)')
     .setOnClickAction(buttonAction));
   // Money out
@@ -210,7 +226,7 @@ function transaction() {
     .setFunctionName('wip');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Outgoing Expenses")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-2_3.png'))
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
     .setText('Money Out (Expenses)')
     .setOnClickAction(buttonAction));
   // Loan
@@ -238,6 +254,55 @@ function wip() {
   return card;
 }
 
+/*
+// This is a statue for reference.
+function transaction_card() {
+  var description = CardService.newTextInput()
+    .setFieldName('Description')
+    .setTitle('Description');
+
+  var amount = CardService.newTextInput()
+    .setFieldName('Amount')
+    .setTitle('Amount');
+
+  var debit = CardService.newSelectionInput().setTitle('From')
+    .setFieldName('Debit')
+    .setType(CardService.SelectionInputType.DROPDOWN);
+
+  INPUT_MAP.forEach((language, index, array) => {
+    debit.addItem(language.text, language.val, language.val == true);
+  })
+
+  var credit = CardService.newSelectionInput().setTitle('To')
+    .setFieldName('Credit')
+    .setType(CardService.SelectionInputType.DROPDOWN);
+
+  INPUT_MAP.forEach((language, index, array) => {
+    credit.addItem(language.text, language.val, language.val == true);
+  })
+
+  inputSheetSection.addWidget(description);
+  inputSheetSection.addWidget(amount);
+  inputSheetSection.addWidget(debit);
+  inputSheetSection.addWidget(credit);
+
+
+  buttonSheetSection.addWidget(CardService.newButtonSet()
+    .addButton(CardService.newTextButton()
+      .setText('Record Transaction')
+      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+      .setOnClickAction(CardService.newAction().setFunctionName('submitRecord'))
+      .setDisabled(false)));
+
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("Record Transactions"))
+    .addSection(inputSheetSection)
+    .addSection(buttonSheetSection)
+    .build();
+  return card;
+}
+ */
 function transaction_card() {
   var description = CardService.newTextInput()
     .setFieldName('Description')
