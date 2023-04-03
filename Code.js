@@ -199,7 +199,7 @@ function transaction() {
   // create three sections with 3 cards.
   // Sell
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('sellCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Sales")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
@@ -303,7 +303,7 @@ function transaction_card() {
   return card;
 }
  */
-function item_card(price, payment_method, funcAction) {
+function itemCard(price, payment_method, funcAction) {
   var item = CardService.newTextInput()
     .setFieldName('Item Name')
     .setTitle('Item Name');
@@ -315,6 +315,10 @@ function item_card(price, payment_method, funcAction) {
   var amount = CardService.newTextInput()
     .setFieldName(price)
     .setTitle(price);
+
+  var amount = CardService.newTextInput()
+    .setFieldName('Quantity')
+    .setTitle('Quantity');
 
   var debit = CardService.newSelectionInput().setTitle(payment_method)
     .setFieldName(payment_method)
@@ -345,6 +349,12 @@ function item_card(price, payment_method, funcAction) {
     .build();
   return card;
 }
+
+function sellCard() {
+  return itemCard(SELLING_PRICE, PAYMENT_METHOD, sellAction)
+}
+
+function sellAction() { }
 
 function template() {
   var currentButton = CardService.newAction()
