@@ -224,7 +224,7 @@ function transaction() {
     .setOnClickAction(buttonAction));
   // Money out
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('expenseCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Outgoing Expenses")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
@@ -363,6 +363,50 @@ function buyCard() {
 }
 
 function buyAction() { }
+
+function expenseCard() {
+  var expenseCategory = CardService.newSelectionInput().setTitle('Choose Expense Category')
+    .setFieldName('expenseCategory')
+    .setType(CardService.SelectionInputType.DROPDOWN);
+
+  INPUT_MAP.forEach((language, index, array) => {
+    expenseCategory.addItem(language.text, language.val, language.val == true);
+  })
+
+  var title = CardService.newTextInput()
+    .setFieldName('Vendor Name')
+    .setTitle('Vendor Name');
+
+  var description = CardService.newTextInput()
+    .setFieldName('Description')
+    .setTitle('Description');
+
+  var amount = CardService.newTextInput()
+    .setFieldName('Amount')
+    .setTitle('Amount');
+
+  inputSheetSection.addWidget(expenseCategory);
+  inputSheetSection.addWidget(title);
+  inputSheetSection.addWidget(description);
+  inputSheetSection.addWidget(amount);
+
+  buttonSheetSection.addWidget(CardService.newButtonSet()
+    .addButton(CardService.newTextButton()
+      .setText('Record Transaction')
+      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+      .setOnClickAction(CardService.newAction().setFunctionName('expAction'))
+      .setDisabled(false)));
+
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("Record Transactions"))
+    .addSection(inputSheetSection)
+    .addSection(buttonSheetSection)
+    .build();
+  return card;
+}
+
+function expAction() { }
 
 function template() {
   var currentButton = CardService.newAction()
