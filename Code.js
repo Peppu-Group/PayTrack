@@ -395,6 +395,86 @@ function sellAction(e) {
     "values": [
       [
         formattedToday,
+        ItemName,
+        Description,
+        Amount,
+        Quantity,
+        Total,
+        Debit,
+      ]
+    ]
+  }
+
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+  Sheets.Spreadsheets.Values.append(
+    request,
+    spreadsheetId,
+    'Sales!A:G',
+    optionalArgs
+  )
+
+  var transrequest = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        Total,
+        'Sales',
+        Debit
+      ]
+    ]
+  }
+
+  Sheets.Spreadsheets.Values.append(
+    transrequest,
+    spreadsheetId,
+    'Transactions!A:E',
+    optionalArgs
+  )
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly Recorded Transaction`))
+    .build() && sellCard();
+}
+
+function buyCard() {
+  return itemCard(BUYING_PRICE, PAYMENT_METHOD, 'buy', PAYMENT_MAP)
+}
+
+function buyAction() {
+  var res = e['formInput'];
+
+  var ItemName = res['Item Name'] ? res['Item Name'] : '';
+  var Description = res['Description'] ? res['Description'] : '';
+  var Amount = res['Amount'] ? res['Amount'] : '';
+  var Quantity = res['Quantity'] ? res['Quantity'] : '';
+  var Debit = res['Debit'] ? res['Debit'] : '';
+
+  let spreadsheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+  const formattedToday = yyyy + '/' + mm + '/' + dd;
+  const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
+
+  // Add today's date
+  // Add unique reference number
+
+  let Total = Amount * Quantity;
+
+  var request = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
         `TRAN${transactiomNumber}`,
         ItemName,
         Description,
@@ -418,14 +498,8 @@ function sellAction(e) {
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly Recorded Transaction`))
-    .build() && sellCard();
+    .build() && buyCard();
 }
-
-function buyCard() {
-  return itemCard(BUYING_PRICE, PAYMENT_METHOD, buyAction, PAYMENT_MAP)
-}
-
-function buyAction() { }
 
 function inflowCard(inflowTitle, inflowAction) {
   var inflowCategory = CardService.newSelectionInput().setTitle(inflowTitle)
