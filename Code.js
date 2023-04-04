@@ -421,7 +421,7 @@ function sellAction(e) {
         `TRAN${transactiomNumber}`,
         Description,
         Total,
-        'Sales',
+        'Sales Account',
         Debit
       ]
     ]
@@ -480,7 +480,7 @@ function buyAction(e) {
         `TRAN${transactiomNumber}`,
         Description,
         Total,
-        'Cash',
+        'Inventory Account',
         Debit
       ]
     ]
