@@ -441,10 +441,10 @@ function sellAction(e) {
 }
 
 function buyCard() {
-  return itemCard(BUYING_PRICE, PAYMENT_METHOD, 'buy', PAYMENT_MAP)
+  return itemCard(BUYING_PRICE, PAYMENT_METHOD, 'buy')
 }
 
-function buyAction() {
+function buyAction(e) {
   var res = e['formInput'];
 
   var ItemName = res['Item Name'] ? res['Item Name'] : '';
@@ -470,24 +470,22 @@ function buyAction() {
 
   let Total = Amount * Quantity;
 
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+
   var request = {
     "majorDimension": "ROWS",
     "values": [
       [
         formattedToday,
         `TRAN${transactiomNumber}`,
-        ItemName,
         Description,
-        Amount,
-        Quantity,
         Total,
-        Debit,
-        'Sales Revenue'
+        'Cash',
+        Debit
       ]
     ]
   }
 
-  var optionalArgs = { valueInputOption: "USER_ENTERED" };
   Sheets.Spreadsheets.Values.append(
     request,
     spreadsheetId,

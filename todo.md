@@ -1,0 +1,1 @@
+- Add Sales account (cash and bank) and buying account (cash and bank) in transactions sheet.
