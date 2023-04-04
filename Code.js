@@ -23,6 +23,11 @@ const INPUT_MAP = [
   { text: 'Services', val: 'Services' },
 ]
 
+const PAYMENT_MAP = [
+  { text: 'Bank', val: 'Bank' },
+  { text: 'Cash', val: 'Cash' }
+]
+
 function invoice_card() {
   /*The reason we're writing this out, is so that we can call the invcard build function
     anywhere. */
@@ -309,7 +314,7 @@ function itemCard(price, payment_method, funcAction) {
     .setTitle('Description');
 
   var amount = CardService.newTextInput()
-    .setFieldName(price)
+    .setFieldName('Amount')
     .setTitle(price);
 
   var quantity = CardService.newTextInput()
@@ -317,10 +322,10 @@ function itemCard(price, payment_method, funcAction) {
     .setTitle('Quantity');
 
   var debit = CardService.newSelectionInput().setTitle(payment_method)
-    .setFieldName(payment_method)
+    .setFieldName('Debit')
     .setType(CardService.SelectionInputType.DROPDOWN);
 
-  INPUT_MAP.forEach((language, index, array) => {
+  PAYMENT_MAP.forEach((language, index, array) => {
     debit.addItem(language.text, language.val, language.val == true);
   })
 
@@ -330,13 +335,21 @@ function itemCard(price, payment_method, funcAction) {
   inputSheetSection.addWidget(quantity);
   inputSheetSection.addWidget(debit);
 
-
-  buttonSheetSection.addWidget(CardService.newButtonSet()
+  if (funcAction === 'sell') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
     .addButton(CardService.newTextButton()
       .setText('Record Transaction')
       .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setOnClickAction(CardService.newAction().setFunctionName(funcAction))
+      .setOnClickAction(CardService.newAction().setFunctionName('sellAction'))
       .setDisabled(false)));
+  } else if (funcAction === 'buy') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
+    .addButton(CardService.newTextButton()
+      .setText('Record Transaction')
+      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+      .setOnClickAction(CardService.newAction().setFunctionName('buyAction'))
+      .setDisabled(false)));
+  }
 
   var card = CardService.newCardBuilder()
     .setName("Card name")
@@ -348,13 +361,68 @@ function itemCard(price, payment_method, funcAction) {
 }
 
 function sellCard() {
-  return itemCard(SELLING_PRICE, PAYMENT_METHOD, sellAction)
+  return itemCard(SELLING_PRICE, PAYMENT_METHOD, 'sell')
 }
 
-function sellAction() { }
+function sellAction(e) {
+  var res = e['formInput'];
+
+  var ItemName = res['Item Name'] ? res['Item Name'] : '';
+  var Description = res['Description'] ? res['Description'] : '';
+  var Amount = res['Amount'] ? res['Amount'] : '';
+  var Quantity = res['Quantity'] ? res['Quantity'] : '';
+  var Debit = res['Debit'] ? res['Debit'] : '';
+
+  let spreadsheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+  const formattedToday = yyyy + '/' + mm + '/' + dd;
+  const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
+
+  // Add today's date
+  // Add unique reference number
+
+  let Total = Amount * Quantity;
+
+  var request = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        ItemName,
+        Description,
+        Amount,
+        Quantity,
+        Total,
+        Debit,
+        'Sales Revenue'
+      ]
+    ]
+  }
+
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+  Sheets.Spreadsheets.Values.append(
+    request,
+    spreadsheetId,
+    'Transactions!A:E',
+    optionalArgs
+  )
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly Recorded Transaction`))
+    .build() && sellCard();
+}
 
 function buyCard() {
-  return itemCard(BUYING_PRICE, PAYMENT_METHOD, buyAction)
+  return itemCard(BUYING_PRICE, PAYMENT_METHOD, buyAction, PAYMENT_MAP)
 }
 
 function buyAction() { }
