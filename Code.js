@@ -3,7 +3,7 @@ const PAYMENT_METHOD = 'Payment Method';
 const BUYING_PRICE = 'Buying Price';
 const EXP_CATEGORY = 'Choose Expense Category';
 const INFLOW_CATEGORY = 'Choose Inflow Category';
-const LOAN_CATEGORY ='Choose Loan Receiving Method';
+const LOAN_CATEGORY = 'Choose Loan Receiving Method';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -337,18 +337,18 @@ function itemCard(price, payment_method, funcAction) {
 
   if (funcAction === 'sell') {
     buttonSheetSection.addWidget(CardService.newButtonSet()
-    .addButton(CardService.newTextButton()
-      .setText('Record Transaction')
-      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setOnClickAction(CardService.newAction().setFunctionName('sellAction'))
-      .setDisabled(false)));
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('sellAction'))
+        .setDisabled(false)));
   } else if (funcAction === 'buy') {
     buttonSheetSection.addWidget(CardService.newButtonSet()
-    .addButton(CardService.newTextButton()
-      .setText('Record Transaction')
-      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setOnClickAction(CardService.newAction().setFunctionName('buyAction'))
-      .setDisabled(false)));
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('buyAction'))
+        .setDisabled(false)));
   }
 
   var card = CardService.newCardBuilder()
@@ -542,19 +542,33 @@ function inflowCard(inflowTitle, inflowAction) {
 }
 
 function expenseCard() {
-  return inflowCard(EXP_CATEGORY, expAction)
+
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
+    .build();
+  return card;
 }
 
 function expAction() { }
 
 function innerflowCard() {
-  return inflowCard(INFLOW_CATEGORY, inAction)
+  // An action response that opens a link in full screen
+  return CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl("https://docs.peppubooks.com")
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
 }
 
 function inAction() { }
 
 function loanCard() {
-  return inflowCard(LOAN_CATEGORY, loanAction)
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
+    .build();
+  return card;
 }
 
 function loanAction() { }
@@ -675,6 +689,7 @@ function copyFile(e) {
   var sheetName = res['Sheet Name'] ? res['Sheet Name'] : '';
   let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
   let file = Drive.Files.copy({ title: sheetName }, id);
+  let new_file_id = file.id;
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly created the file ${sheetName}`))
@@ -687,10 +702,12 @@ function copySheet(e) {
   let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
   let file = Drive.Files.copy({ title: sheetName }, id);
   let new_file_id = file.id;
-  return CardService.newActionResponseBuilder()
-    .setNotification(CardService.newNotification()
-      .setText(`Successfuly created the file ${sheetName}`))
-    .build() && openUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`);
+  // An action response that opens a link in full screen
+  return createFile() && CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl("https://docs.peppubooks.com")
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
 }
 
 function openUrl(url) {
@@ -1106,5 +1123,10 @@ function completetrans() {
 }
 
 function onDocs() {
-  openUrl(`https://docs.peppubooks.com`);
+  // An action response that opens a documentation in full screen
+  return CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl("https://docs.peppubooks.com")
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
 }
