@@ -1,5 +1,9 @@
-const DEFAULT_INPUT_TEXT = '';
-const DEFAULT_OUTPUT_TEXT = '';
+const SELLING_PRICE = 'Selling Price';
+const PAYMENT_METHOD = 'Payment Method';
+const BUYING_PRICE = 'Buying Price';
+const EXP_CATEGORY = 'Choose Expense Category';
+const INFLOW_CATEGORY = 'Choose Inflow Category';
+const LOAN_CATEGORY = 'Choose Loan Receiving Method';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -17,6 +21,11 @@ const INPUT_MAP = [
   { text: 'Credit card', val: 'Credit card' },
   { text: 'Sales', val: 'Sales' },
   { text: 'Services', val: 'Services' },
+]
+
+const PAYMENT_MAP = [
+  { text: 'Bank', val: 'Bank' },
+  { text: 'Cash', val: 'Cash' }
 ]
 
 function invoice_card() {
@@ -197,25 +206,41 @@ function createFile() {
 
 function transaction() {
   // create three sections with 3 cards.
+  // Sell
+  var buttonAction = CardService.newAction()
+    .setFunctionName('sellCard');
+  transactionSection.addWidget(CardService.newDecoratedText()
+    .setBottomLabel("Record Sales")
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
+    .setText('Sell')
+    .setOnClickAction(buttonAction));
+  // Buy
+  var buttonAction = CardService.newAction()
+    .setFunctionName('buyCard');
+  transactionSection.addWidget(CardService.newDecoratedText()
+    .setBottomLabel("Restock Inventory")
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
+    .setText('Buy')
+    .setOnClickAction(buttonAction));
   // Money In
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('innerflowCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Incoming Funds")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-3.png'))
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
     .setText('Money In (Income)')
     .setOnClickAction(buttonAction));
   // Money out
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('expenseCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Outgoing Expenses")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/Arrow-1-2_3.png'))
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
     .setText('Money Out (Expenses)')
     .setOnClickAction(buttonAction));
   // Loan
   var buttonAction = CardService.newAction()
-    .setFunctionName('wip');
+    .setFunctionName('loanCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record and Manage Loans")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
@@ -230,14 +255,8 @@ function transaction() {
   return card;
 }
 
-function wip() {
-  var card = CardService.newCardBuilder()
-    .setName("Card name")
-    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
-    .build();
-  return card;
-}
-
+/*
+// This is a statue for reference.
 function transaction_card() {
   var description = CardService.newTextInput()
     .setFieldName('Description')
@@ -284,6 +303,275 @@ function transaction_card() {
     .build();
   return card;
 }
+ */
+function itemCard(price, payment_method, funcAction) {
+  var item = CardService.newTextInput()
+    .setFieldName('Item Name')
+    .setTitle('Item Name');
+
+  var description = CardService.newTextInput()
+    .setFieldName('Description')
+    .setTitle('Description');
+
+  var amount = CardService.newTextInput()
+    .setFieldName('Amount')
+    .setTitle(price);
+
+  var quantity = CardService.newTextInput()
+    .setFieldName('Quantity')
+    .setTitle('Quantity');
+
+  var debit = CardService.newSelectionInput().setTitle(payment_method)
+    .setFieldName('Debit')
+    .setType(CardService.SelectionInputType.DROPDOWN);
+
+  PAYMENT_MAP.forEach((language, index, array) => {
+    debit.addItem(language.text, language.val, language.val == true);
+  })
+
+  inputSheetSection.addWidget(item);
+  inputSheetSection.addWidget(description);
+  inputSheetSection.addWidget(amount);
+  inputSheetSection.addWidget(quantity);
+  inputSheetSection.addWidget(debit);
+
+  if (funcAction === 'sell') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('sellAction'))
+        .setDisabled(false)));
+  } else if (funcAction === 'buy') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('buyAction'))
+        .setDisabled(false)));
+  }
+
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("Record Transactions"))
+    .addSection(inputSheetSection)
+    .addSection(buttonSheetSection)
+    .build();
+  return card;
+}
+
+function sellCard() {
+  return itemCard(SELLING_PRICE, PAYMENT_METHOD, 'sell')
+}
+
+function sellAction(e) {
+  var res = e['formInput'];
+
+  var ItemName = res['Item Name'] ? res['Item Name'] : '';
+  var Description = res['Description'] ? res['Description'] : '';
+  var Amount = res['Amount'] ? res['Amount'] : '';
+  var Quantity = res['Quantity'] ? res['Quantity'] : '';
+  var Debit = res['Debit'] ? res['Debit'] : '';
+
+  let spreadsheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+  const formattedToday = yyyy + '/' + mm + '/' + dd;
+  const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
+
+  // Add today's date
+  // Add unique reference number
+
+  let Total = Amount * Quantity;
+
+  var request = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        ItemName,
+        Description,
+        Amount,
+        Quantity,
+        Total,
+        Debit,
+      ]
+    ]
+  }
+
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+  Sheets.Spreadsheets.Values.append(
+    request,
+    spreadsheetId,
+    'Sales!A:G',
+    optionalArgs
+  )
+
+  var transrequest = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        Total,
+        'Sales Account',
+        Debit
+      ]
+    ]
+  }
+
+  Sheets.Spreadsheets.Values.append(
+    transrequest,
+    spreadsheetId,
+    'Transactions!A:E',
+    optionalArgs
+  )
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly Recorded Transaction`))
+    .build() && sellCard();
+}
+
+function buyCard() {
+  return itemCard(BUYING_PRICE, PAYMENT_METHOD, 'buy')
+}
+
+function buyAction(e) {
+  var res = e['formInput'];
+
+  var ItemName = res['Item Name'] ? res['Item Name'] : '';
+  var Description = res['Description'] ? res['Description'] : '';
+  var Amount = res['Amount'] ? res['Amount'] : '';
+  var Quantity = res['Quantity'] ? res['Quantity'] : '';
+  var Debit = res['Debit'] ? res['Debit'] : '';
+
+  let spreadsheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+  const formattedToday = yyyy + '/' + mm + '/' + dd;
+  const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
+
+  // Add today's date
+  // Add unique reference number
+
+  let Total = Amount * Quantity;
+
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+
+  var request = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        Total,
+        'Inventory Account',
+        Debit
+      ]
+    ]
+  }
+
+  Sheets.Spreadsheets.Values.append(
+    request,
+    spreadsheetId,
+    'Transactions!A:E',
+    optionalArgs
+  )
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly Recorded Transaction`))
+    .build() && buyCard();
+}
+
+function inflowCard(inflowTitle, inflowAction) {
+  var inflowCategory = CardService.newSelectionInput().setTitle(inflowTitle)
+    .setFieldName('Category')
+    .setType(CardService.SelectionInputType.DROPDOWN);
+
+  INPUT_MAP.forEach((language, index, array) => {
+    inflowCategory.addItem(language.text, language.val, language.val == true);
+  })
+
+  var title = CardService.newTextInput()
+    .setFieldName(`Vendor Name`)
+    .setTitle(`Entity's Name`);
+
+  var description = CardService.newTextInput()
+    .setFieldName('Description')
+    .setTitle('Description');
+
+  var amount = CardService.newTextInput()
+    .setFieldName('Amount')
+    .setTitle('Amount');
+
+  inputSheetSection.addWidget(inflowCategory);
+  inputSheetSection.addWidget(title);
+  inputSheetSection.addWidget(description);
+  inputSheetSection.addWidget(amount);
+
+  buttonSheetSection.addWidget(CardService.newButtonSet()
+    .addButton(CardService.newTextButton()
+      .setText('Record Transaction')
+      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+      .setOnClickAction(CardService.newAction().setFunctionName(inflowAction))
+      .setDisabled(false)));
+
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("Record Transactions"))
+    .addSection(inputSheetSection)
+    .addSection(buttonSheetSection)
+    .build();
+  return card;
+}
+
+function expenseCard() {
+
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
+    .build();
+  return card;
+}
+
+function expAction() { }
+
+function innerflowCard() {
+  // An action response that opens a link in full screen
+  return CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl("https://docs.peppubooks.com")
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
+}
+
+function inAction() { }
+
+function loanCard() {
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
+    .build();
+  return card;
+}
+
+function loanAction() { }
 
 function template() {
   var currentButton = CardService.newAction()
@@ -401,10 +689,18 @@ function copyFile(e) {
   var sheetName = res['Sheet Name'] ? res['Sheet Name'] : '';
   let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
   let file = Drive.Files.copy({ title: sheetName }, id);
-  return CardService.newActionResponseBuilder()
+  let new_file_id = file.id;
+  // An action response that opens the spreadsheet in full screen
+  var nav = CardService.newNavigation().pushCard(createFile());
+    return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
-      .setText(`Successfuly created the file ${sheetName}`))
-    .build() && createFile();
+      .setText(`Successfuly Created File ${sheetName}. Open file from your Drive or allow redirect from drive.`)).setNavigation(nav)
+      .setOpenLink(CardService.newOpenLink()
+      .setUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`)
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
+
+    
 }
 
 function copySheet(e) {
@@ -413,25 +709,14 @@ function copySheet(e) {
   let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
   let file = Drive.Files.copy({ title: sheetName }, id);
   let new_file_id = file.id;
-  return CardService.newActionResponseBuilder()
-    .setNotification(CardService.newNotification()
-      .setText(`Successfuly created the file ${sheetName}`))
-    .build() && openUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`);
+  // An action response that opens the spreadsheet in full screen
+  return openUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`);
 }
 
 function openUrl(url) {
-  var html = HtmlService.createHtmlOutput('<!DOCTYPE html><html><script>'
-    + 'window.close = function(){window.setTimeout(function(){google.script.host.close()},9)};'
-    + 'var a = document.createElement("a"); a.href="' + url + '"; a.target="_blank";'
-    + 'if(document.createEvent){'
-    + '  var event=document.createEvent("MouseEvents");'
-    + '  if(navigator.userAgent.toLowerCase().indexOf("firefox")>-1){window.document.body.append(a)}'
-    + '  event.initEvent("click",true,true); a.dispatchEvent(event);'
-    + '}else{ a.click() }'
-    + 'close();'
-    + '</script>'
+  var html = HtmlService.createHtmlOutput('<!DOCTYPE html><html>'
     // Offer URL as clickable link in case above code fails.
-    + '<body style="word-break:break-word;font-family:sans-serif;">Failed to open automatically.  Click below:<br/><a href="' + url + '" target="_blank" onclick="window.close()">Click here to proceed</a>.</body>'
+    + '<body style="word-break:break-word;font-family:sans-serif;">Failed to open spreadsheet automatically.  <br/><a href="' + url + '" target="_blank" onclick="window.close()">Click here to open spreadsheet</a>.</body>'
     + '<script>google.script.host.setHeight(55);google.script.host.setWidth(410)</script>'
     + '</html>')
     .setWidth(90).setHeight(1);
@@ -832,5 +1117,10 @@ function completetrans() {
 }
 
 function onDocs() {
-  openUrl(`https://docs.peppubooks.com`);
+  // An action response that opens a documentation in full screen
+  return CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl("https://docs.peppubooks.com")
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
 }

@@ -1,0 +1,1 @@
+- Add Sales account (cash and bank) and Inventory account (cash and bank) in transactions sheet and purchasing account.
