@@ -690,10 +690,12 @@ function copyFile(e) {
   let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
   let file = Drive.Files.copy({ title: sheetName }, id);
   let new_file_id = file.id;
-  return CardService.newActionResponseBuilder()
-    .setNotification(CardService.newNotification()
-      .setText(`Successfuly created the file ${sheetName}`))
-    .build() && createFile();
+  // An action response that opens the spreadsheet in full screen
+  return createFile() && CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`)
+      .setOpenAs(CardService.OpenAs.FULL_SIZE))
+    .build();
 }
 
 function copySheet(e) {
@@ -702,10 +704,10 @@ function copySheet(e) {
   let id = '1S4GMiZ0H0_6OHH7DEnjZt07-6kk0eMP4YSNUmRcKZXA';
   let file = Drive.Files.copy({ title: sheetName }, id);
   let new_file_id = file.id;
-  // An action response that opens a link in full screen
+  // An action response that opens the spreadsheet in full screen
   return createFile() && CardService.newActionResponseBuilder()
     .setOpenLink(CardService.newOpenLink()
-      .setUrl("https://docs.peppubooks.com")
+      .setUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`)
       .setOpenAs(CardService.OpenAs.FULL_SIZE))
     .build();
 }
