@@ -691,11 +691,16 @@ function copyFile(e) {
   let file = Drive.Files.copy({ title: sheetName }, id);
   let new_file_id = file.id;
   // An action response that opens the spreadsheet in full screen
-  return createFile() && CardService.newActionResponseBuilder()
-    .setOpenLink(CardService.newOpenLink()
+  var nav = CardService.newNavigation().pushCard(createFile());
+    return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly Created File ${sheetName}. Open file from your Drive or allow redirect from drive.`)).setNavigation(nav)
+      .setOpenLink(CardService.newOpenLink()
       .setUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`)
       .setOpenAs(CardService.OpenAs.FULL_SIZE))
     .build();
+
+    
 }
 
 function copySheet(e) {
@@ -705,26 +710,13 @@ function copySheet(e) {
   let file = Drive.Files.copy({ title: sheetName }, id);
   let new_file_id = file.id;
   // An action response that opens the spreadsheet in full screen
-  return createFile() && CardService.newActionResponseBuilder()
-    .setOpenLink(CardService.newOpenLink()
-      .setUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`)
-      .setOpenAs(CardService.OpenAs.FULL_SIZE))
-    .build();
+  return openUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`);
 }
 
 function openUrl(url) {
-  var html = HtmlService.createHtmlOutput('<!DOCTYPE html><html><script>'
-    + 'window.close = function(){window.setTimeout(function(){google.script.host.close()},9)};'
-    + 'var a = document.createElement("a"); a.href="' + url + '"; a.target="_blank";'
-    + 'if(document.createEvent){'
-    + '  var event=document.createEvent("MouseEvents");'
-    + '  if(navigator.userAgent.toLowerCase().indexOf("firefox")>-1){window.document.body.append(a)}'
-    + '  event.initEvent("click",true,true); a.dispatchEvent(event);'
-    + '}else{ a.click() }'
-    + 'close();'
-    + '</script>'
+  var html = HtmlService.createHtmlOutput('<!DOCTYPE html><html>'
     // Offer URL as clickable link in case above code fails.
-    + '<body style="word-break:break-word;font-family:sans-serif;">Failed to open automatically.  Click below:<br/><a href="' + url + '" target="_blank" onclick="window.close()">Click here to proceed</a>.</body>'
+    + '<body style="word-break:break-word;font-family:sans-serif;">Failed to open spreadsheet automatically.  <br/><a href="' + url + '" target="_blank" onclick="window.close()">Click here to open spreadsheet</a>.</body>'
     + '<script>google.script.host.setHeight(55);google.script.host.setWidth(410)</script>'
     + '</html>')
     .setWidth(90).setHeight(1);
