@@ -231,14 +231,6 @@ function transaction() {
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
     .setText('Buy')
     .setOnClickAction(buttonAction));
-  // Money In
-  var buttonAction = CardService.newAction()
-    .setFunctionName('innerflowCard');
-  transactionSection.addWidget(CardService.newDecoratedText()
-    .setBottomLabel("Record Incoming Funds")
-    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
-    .setText('Money In (Income)')
-    .setOnClickAction(buttonAction));
   // Money out
   var buttonAction = CardService.newAction()
     .setFunctionName('expenseCard');
@@ -254,6 +246,14 @@ function transaction() {
     .setBottomLabel("Record and Manage Loans")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
     .setText('Loans')
+    .setOnClickAction(buttonAction));
+  // Money In
+  var buttonAction = CardService.newAction()
+    .setFunctionName('innerflowCard');
+  transactionSection.addWidget(CardService.newDecoratedText()
+    .setBottomLabel("Record Incoming Funds")
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
+    .setText('Money In (Income)')
     .setOnClickAction(buttonAction));
 
   var card = CardService.newCardBuilder()
