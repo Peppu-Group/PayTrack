@@ -583,10 +583,62 @@ function innerflowCard() {
 function inAction() { }
 
 function loanCard() {
-  return inflowCard(LOAN_CATEGORY, loanAction)
+  return inflowCard(LOAN_CATEGORY, "loan")
 }
 
-function loanAction() { }
+function loanAction(e) {
+  var res = e['formInput'];
+
+  var Description = res['Description'] ? res['Description'] : '';
+  var Amount = res['Amount'] ? res['Amount'] : '';
+  var Credit = res['Category'] ? res['Category'] : '';
+
+  let spreadsheetId = SpreadsheetApp.getActiveSpreadsheet().getId();
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+  const formattedToday = yyyy + '/' + mm + '/' + dd;
+  const transactiomNumber = Math.floor(100000 + Math.random() * 900000);
+
+  // Add today's date
+  // Add unique reference number
+
+  var optionalArgs = { valueInputOption: "USER_ENTERED" };
+
+  var request = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        Amount,
+        'Loan',
+        Credit
+      ]
+    ]
+  }
+
+  Sheets.Spreadsheets.Values.append(
+    request,
+    spreadsheetId,
+    'Transactions!A:E',
+    optionalArgs
+  )
+
+  var nav = CardService.newNavigation().pushCard(loanCard());
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification()
+      .setText(`Successfuly Recorded Sales`))
+    .setNavigation(nav)
+    .build();
+}
 
 function template() {
   var currentButton = CardService.newAction()
