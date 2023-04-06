@@ -3,7 +3,7 @@ const PAYMENT_METHOD = 'Payment Method';
 const BUYING_PRICE = 'Buying Price';
 const EXP_CATEGORY = 'Choose Expense Category';
 const INFLOW_CATEGORY = 'Choose Inflow Category';
-const LOAN_CATEGORY = 'Choose Loan Receiving Method';
+const LOAN_CATEGORY = 'Choose Liability Type';
 
 var newSheetSection = CardService.newCardSection();
 var inputSheetSection = CardService.newCardSection();
@@ -35,6 +35,11 @@ const OUT_MAP = [
 const PAYMENT_MAP = [
   { text: 'Bank', val: 'Bank' },
   { text: 'Cash', val: 'Cash' }
+]
+
+const LIABILITY_MAP = [
+  { text: 'Loan', val: 'Loan' },
+  { text: 'Credit card', val: 'Credit card' }
 ]
 
 function invoice_card() {
@@ -231,21 +236,21 @@ function transaction() {
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
     .setText('Buy')
     .setOnClickAction(buttonAction));
-  // Money out
+  // Expense card
   var buttonAction = CardService.newAction()
     .setFunctionName('expenseCard');
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Outgoing Expenses")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
-    .setText('Money Out (Expense)')
+    .setText('Expense')
     .setOnClickAction(buttonAction));
   // Loan
   var buttonAction = CardService.newAction()
     .setFunctionName('loanCard');
   transactionSection.addWidget(CardService.newDecoratedText()
-    .setBottomLabel("Record and Manage Loans")
+    .setBottomLabel("Record and Manage Liabilities Into Business")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://www.linkpicture.com/q/icons8-forward-button-64.png'))
-    .setText('Loans')
+    .setText('Liability')
     .setOnClickAction(buttonAction));
   // Money In
   var buttonAction = CardService.newAction()
@@ -253,7 +258,15 @@ function transaction() {
   transactionSection.addWidget(CardService.newDecoratedText()
     .setBottomLabel("Record Incoming Funds")
     .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/Ldk6ftd/Group-1-35.png'))
-    .setText('Money In (Income)')
+    .setText('Money In')
+    .setOnClickAction(buttonAction));
+  // Money out
+  var buttonAction = CardService.newAction()
+    .setFunctionName('outCard');
+  transactionSection.addWidget(CardService.newDecoratedText()
+    .setBottomLabel("Pay for Liabilities")
+    .setEndIcon(CardService.newIconImage().setIconUrl('https://i.ibb.co/NYFqrzK/Group-1-36.png'))
+    .setText('Money Out')
     .setOnClickAction(buttonAction));
 
   var card = CardService.newCardBuilder()
@@ -562,7 +575,7 @@ function inflowCard(inflowTitle, inflowAction) {
     .setType(CardService.SelectionInputType.DROPDOWN);
 
   if (inflowAction === 'loan') {
-    INPUT_MAP.forEach((language, index, array) => {
+    LIABILITY_MAP.forEach((language, index, array) => {
       inflowCategory.addItem(language.text, language.val, language.val == true);
     })
   } else if (inflowAction === 'in') {
@@ -730,8 +743,8 @@ function loanAction(e) {
         `TRAN${transactiomNumber}`,
         Description,
         Amount,
-        'Loan',
-        Credit
+        Credit,
+        'Bank',
       ]
     ]
   }
@@ -750,6 +763,14 @@ function loanAction(e) {
       .setText(`Successfuly Recorded Sales`))
     .setNavigation(nav)
     .build();
+}
+
+function outCard() {
+  var card = CardService.newCardBuilder()
+    .setName("Card name")
+    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
+    .build();
+  return card;
 }
 
 function template() {
