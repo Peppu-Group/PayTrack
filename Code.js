@@ -443,6 +443,51 @@ function sellAction(e) {
     optionalArgs
   )
 
+  // Double entry bookkeeping one.
+  var bookRequestOne = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        ItemName,
+        'Sales Account',
+        Total
+      ]
+    ]
+  }
+
+  Sheets.Spreadsheets.Values.append(
+    bookRequestOne,
+    spreadsheetId,
+    'General Ledger!A:I',
+    optionalArgs
+  )
+
+  // Double entry bookkeeping two.
+  var bookRequestTwo = {
+    "majorDimension": "ROWS",
+    "values": [
+      [
+        formattedToday,
+        `TRAN${transactiomNumber}`,
+        Description,
+        ItemName,
+        'Inventory Account',
+        '',
+        Total
+      ]
+    ]
+  }
+
+  Sheets.Spreadsheets.Values.append(
+    bookRequestTwo,
+    spreadsheetId,
+    'General Ledger!A:I',
+    optionalArgs
+  )
+
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly Recorded Transaction`))
