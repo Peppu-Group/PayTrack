@@ -480,8 +480,8 @@ function buyAction(e) {
         `TRAN${transactiomNumber}`,
         Description,
         Total,
+        Debit,
         'Inventory Account',
-        Debit
       ]
     ]
   }
@@ -493,10 +493,13 @@ function buyAction(e) {
     optionalArgs
   )
 
+  var nav = CardService.newNavigation().pushCard(buyCard());
+
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
-      .setText(`Successfuly Recorded Transaction`))
-    .build() && buyCard();
+      .setText(`Successfuly Recorded Sales`))
+      .setNavigation(nav)
+    .build();
 }
 
 function inflowCard(inflowTitle, inflowAction) {
