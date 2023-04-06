@@ -498,7 +498,7 @@ function buyAction(e) {
   return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly Recorded Sales`))
-      .setNavigation(nav)
+    .setNavigation(nav)
     .build();
 }
 
@@ -528,12 +528,28 @@ function inflowCard(inflowTitle, inflowAction) {
   inputSheetSection.addWidget(description);
   inputSheetSection.addWidget(amount);
 
-  buttonSheetSection.addWidget(CardService.newButtonSet()
-    .addButton(CardService.newTextButton()
-      .setText('Record Transaction')
-      .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-      .setOnClickAction(CardService.newAction().setFunctionName(inflowAction))
-      .setDisabled(false)));
+  if (inflowAction === 'loan') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('loanAction'))
+        .setDisabled(false)));
+  } else if (inflowAction === 'in') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('inAction'))
+        .setDisabled(false)));
+  } else if (inflowAction === 'out') {
+    buttonSheetSection.addWidget(CardService.newButtonSet()
+      .addButton(CardService.newTextButton()
+        .setText('Record Transaction')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOnClickAction(CardService.newAction().setFunctionName('outAction'))
+        .setDisabled(false)));
+  }
 
   var card = CardService.newCardBuilder()
     .setName("Card name")
@@ -567,11 +583,7 @@ function innerflowCard() {
 function inAction() { }
 
 function loanCard() {
-  var card = CardService.newCardBuilder()
-    .setName("Card name")
-    .setHeader(CardService.newCardHeader().setTitle("This section is still a work in progress"))
-    .build();
-  return card;
+  return inflowCard(LOAN_CATEGORY, loanAction)
 }
 
 function loanAction() { }
@@ -695,15 +707,15 @@ function copyFile(e) {
   let new_file_id = file.id;
   // An action response that opens the spreadsheet in full screen
   var nav = CardService.newNavigation().pushCard(createFile());
-    return CardService.newActionResponseBuilder()
+  return CardService.newActionResponseBuilder()
     .setNotification(CardService.newNotification()
       .setText(`Successfuly Created File ${sheetName}. Open file from your Drive or allow redirect from drive.`)).setNavigation(nav)
-      .setOpenLink(CardService.newOpenLink()
+    .setOpenLink(CardService.newOpenLink()
       .setUrl(`https://docs.google.com/spreadsheets/d/${new_file_id}`)
       .setOpenAs(CardService.OpenAs.FULL_SIZE))
     .build();
 
-    
+
 }
 
 function copySheet(e) {
